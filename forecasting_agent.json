@@ -1,0 +1,124 @@
+{
+  "name": "forecasting_agent",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9c23716f-1a3b-4a8b-af93-4e261587cabd",
+      "name": "When chat message received",
+      "webhookId": "4f56abd0-2f1b-4d22-b573-f74ce2e70368"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=This tool queries the 'all_retail_data' view. Columns available: invoice, stock_code, description, quantity, invoice_date, price, customer_id, country. Use this to answer questions about sales, products, and revenue."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "3802e792-4196-4502-bd16-71c3cfcf8866",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "bf3492a7-5b9e-4a89-867e-1a625fa55864",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "hXrfOG92aMtgDvji",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "{{ $fromAI('sql_statement') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6,
+      "position": [
+        368,
+        208
+      ],
+      "id": "1d67163f-baef-4d10-a015-fed71206914b",
+      "name": "Execute a SQL query in Postgres",
+      "credentials": {
+        "postgres": {
+          "id": "Fk0SCT5s7RtV6WXP",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query in Postgres": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "211e079d-82d0-4365-af92-2ad25d0253a1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7448c2f500609f4266410bdaff5c43b3cbe8a925c1768f8f3b745ab7131f862f"
+  },
+  "id": "Ma2JK9cAjuJcyFQlIjTDv",
+  "tags": []
+}
