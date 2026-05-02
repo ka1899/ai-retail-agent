@@ -18,7 +18,7 @@
     {
       "parameters": {
         "options": {
-          "systemMessage": "=This tool queries the 'all_retail_data' view. Columns available: invoice, stock_code, description, quantity, invoice_date, price, customer_id, country. Use this to answer questions about sales, products, and revenue."
+          "systemMessage": "=This tool queries the 'all_retail_data' view. Columns available: invoice, stock_code, description, quantity, invoice_date, price, customer_id, country. Only generate SELECT queries — never INSERT, UPDATE, DELETE, or DROP. Use this to answer questions about sales, products, and revenue. If you cannot answer the question from the available data, say so clearly rather than generating an approximate query."
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
